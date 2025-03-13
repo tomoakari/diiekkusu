@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
   import { supabase } from '$lib/supabase';
 
   onMount(() => {
@@ -15,12 +14,12 @@
         access_token: accessToken,
         refresh_token: refreshToken
       }).then(() => {
-        // ホームページにリダイレクト
-        goto('/');
+        // ホームページにリダイレクト（ページをリロードするためにwindow.location.hrefを使用）
+        window.location.href = '/';
       });
     } else {
-      // エラーがある場合はログインページにリダイレクト
-      goto('/login');
+      // エラーがある場合はログインページにリダイレクト（ページをリロードするためにwindow.location.hrefを使用）
+      window.location.href = '/login';
     }
   });
 </script>
