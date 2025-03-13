@@ -28,7 +28,16 @@
           </p>
         </CardContent>
         <CardFooter>
-          <Button href={isAuthenticated() ? "/sjis2utf8" : "/login"} class="w-full">
+          <Button 
+            class="w-full"
+            on:click={() => {
+              if (isAuthenticated()) {
+                window.location.href = "/sjis2utf8";
+              } else {
+                window.location.href = "/login";
+              }
+            }}
+          >
             {isAuthenticated() ? "変換する" : "ログインして変換する"}
           </Button>
         </CardFooter>
@@ -48,7 +57,16 @@
           </p>
         </CardContent>
         <CardFooter>
-          <Button href={isAuthenticated() ? "/utf82sjis" : "/login"} class="w-full">
+          <Button 
+            class="w-full"
+            on:click={() => {
+              if (isAuthenticated()) {
+                window.location.href = "/utf82sjis";
+              } else {
+                window.location.href = "/login";
+              }
+            }}
+          >
             {isAuthenticated() ? "変換する" : "ログインして変換する"}
           </Button>
         </CardFooter>
