@@ -22,14 +22,19 @@
 <header class="bg-background border-b">
   <div class="container mx-auto px-4 py-3 flex items-center justify-between">
     <div class="flex items-center space-x-2">
-      <a href="/" class="text-xl font-semibold text-primary">ディーエックス</a>
+      <button 
+        on:click={() => window.location.href = "/"} 
+        class="text-xl font-semibold text-primary"
+      >
+        ディーエックス
+      </button>
     </div>
 
     <nav class="hidden md:flex items-center space-x-6">
       {#each navLinks as link}
         {#if !link.requireAuth || isAuthenticated()}
-          <a 
-            href={link.href} 
+          <button 
+            on:click={() => window.location.href = link.href}
             class={cn(
               "text-sm font-medium transition-colors hover:text-primary",
               $page.url.pathname === link.href 
@@ -38,7 +43,7 @@
             )}
           >
             {link.label}
-          </a>
+          </button>
         {/if}
       {/each}
     </nav>
@@ -52,7 +57,11 @@
           ログアウト
         </Button>
       {:else}
-        <Button variant="outline" size="sm" href="/login">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          on:click={() => window.location.href = "/login"}
+        >
           ログイン
         </Button>
       {/if}
