@@ -2,6 +2,10 @@
   import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { isAuthenticated } from '$lib/utils/auth';
+  import { user } from '$lib/supabase';
+  
+  // userストアを購読して、認証状態が変更されたときに自動的に更新されるようにする
+  $: authenticated = !!$user;
 </script>
 
 <div class="space-y-8">
@@ -31,14 +35,14 @@
           <Button 
             class="w-full"
             on:click={() => {
-              if (isAuthenticated()) {
+              if (authenticated) {
                 window.location.href = "/sjis2utf8";
               } else {
                 window.location.href = "/login";
               }
             }}
           >
-            {isAuthenticated() ? "変換する" : "ログインして変換する"}
+            {authenticated ? "変換する" : "ログインして変換する"}
           </Button>
         </CardFooter>
       </Card>
@@ -60,14 +64,14 @@
           <Button 
             class="w-full"
             on:click={() => {
-              if (isAuthenticated()) {
+              if (authenticated) {
                 window.location.href = "/utf82sjis";
               } else {
                 window.location.href = "/login";
               }
             }}
           >
-            {isAuthenticated() ? "変換する" : "ログインして変換する"}
+            {authenticated ? "変換する" : "ログインして変換する"}
           </Button>
         </CardFooter>
       </Card>

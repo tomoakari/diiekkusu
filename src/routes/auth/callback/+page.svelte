@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { supabase } from '$lib/supabase';
+  import { supabase, user } from '$lib/supabase';
 
   onMount(() => {
     // URLからハッシュフラグメントを取得
@@ -13,7 +13,13 @@
       supabase.auth.setSession({
         access_token: accessToken,
         refresh_token: refreshToken
-      }).then(() => {
+      }).then(({ data }) => {
+        // ユーザーストアを明示的に更新
+        if (data.session?.user) {
+          user.set(data.session.user);
+          console.log('User authenticated:', data.session.user);
+        }
+        
         // ホームページにリダイレクト（ページをリロードするためにwindow.location.hrefを使用）
         window.location.href = '/';
       });

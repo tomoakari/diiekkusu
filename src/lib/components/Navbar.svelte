@@ -1,9 +1,13 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
   import { isAuthenticated, getUserInfo } from '$lib/utils/auth';
-  import { signOut } from '$lib/supabase';
+  import { signOut, user } from '$lib/supabase';
   import { page } from '$app/stores';
   import { cn } from '$lib/utils';
+  
+  // userストアを購読して、認証状態が変更されたときに自動的に更新されるようにする
+  $: authenticated = !!$user;
+  $: userInfo = $user;
 
   // ナビゲーションリンク
   const navLinks = [
@@ -32,7 +36,7 @@
 
     <nav class="hidden md:flex items-center space-x-6">
       {#each navLinks as link}
-        {#if !link.requireAuth || isAuthenticated()}
+        {#if !link.requireAuth || authenticated}
           <button 
             on:click={() => window.location.href = link.href}
             class={cn(
@@ -49,9 +53,9 @@
     </nav>
 
     <div class="flex items-center space-x-4">
-      {#if isAuthenticated()}
+      {#if authenticated}
         <div class="text-sm text-muted-foreground">
-          {getUserInfo()?.email || 'ユーザー'}
+          {userInfo?.email || 'ユーザー'}
         </div>
         <Button variant="outline" size="sm" on:click={handleLogout}>
           ログアウト
