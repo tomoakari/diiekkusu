@@ -18,6 +18,9 @@
         if (data.session?.user) {
           user.set(data.session.user);
           console.log('User authenticated:', data.session.user);
+          
+          // クッキーにセッション情報を保存
+          document.cookie = `sb-auth-token=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
         }
         
         // ホームページにリダイレクト（ページをリロードするためにwindow.location.hrefを使用）
