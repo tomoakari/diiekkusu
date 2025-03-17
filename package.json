@@ -21,6 +21,7 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/svelte": "^5.2.4",
+		"@types/encoding-japanese": "^2.2.1",
 		"@types/file-saver": "^2.0.7",
 		"autoprefixer": "^10.4.21",
 		"bits-ui": "^0.22.0",
@@ -42,7 +43,7 @@
 	"dependencies": {
 		"@supabase/supabase-js": "^2.49.1",
 		"@sveltejs/adapter-node": "^5.2.12",
-		"file-saver": "^2.0.5",
-		"iconv-lite": "^0.6.3"
+		"encoding-japanese": "^2.2.0",
+		"file-saver": "^2.0.5"
 	}
 }

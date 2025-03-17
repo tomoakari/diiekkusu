@@ -1,4 +1,4 @@
-import iconv from 'iconv-lite';
+import * as Encoding from 'encoding-japanese';
 import FileSaver from 'file-saver';
 
 /**
@@ -7,8 +7,6 @@ import FileSaver from 'file-saver';
  * @returns 検出された文字コード
  */
 export function detectEncoding(buffer: ArrayBuffer): string {
-  // 簡易的な文字コード判定
-  // より正確な判定が必要な場合は、jschardetなどのライブラリを使用することを検討
   const bytes = new Uint8Array(buffer);
   
   // UTF-8 BOMの検出
@@ -16,22 +14,10 @@ export function detectEncoding(buffer: ArrayBuffer): string {
     return 'UTF-8';
   }
   
-  // Shift_JISの特徴的なバイトパターンを検出
-  let isSJIS = false;
-  for (let i = 0; i < bytes.length - 1; i++) {
-    const b1 = bytes[i];
-    const b2 = bytes[i + 1];
-    
-    // Shift_JISの第一バイトと第二バイトの範囲をチェック
-    if ((b1 >= 0x81 && b1 <= 0x9F) || (b1 >= 0xE0 && b1 <= 0xFC)) {
-      if ((b2 >= 0x40 && b2 <= 0x7E) || (b2 >= 0x80 && b2 <= 0xFC)) {
-        isSJIS = true;
-        break;
-      }
-    }
-  }
+  // encoding-japaneseを使用して文字コードを検出
+  const detected = Encoding.detect(bytes);
   
-  if (isSJIS) {
+  if (detected === 'SJIS') {
     return 'Shift_JIS';
   }
   
@@ -45,9 +31,23 @@ export function detectEncoding(buffer: ArrayBuffer): string {
  * @returns UTF-8エンコードされたバッファ
  */
 export function convertSJISToUTF8(buffer: ArrayBuffer): ArrayBufferLike {
-  const sjisBuffer = Buffer.from(buffer);
-  const utf8String = iconv.decode(sjisBuffer, 'Shift_JIS');
-  return iconv.encode(utf8String, 'UTF-8').buffer;
+  const bytes = new Uint8Array(buffer);
+  
+  // SJISからUnicodeに変換
+  const unicodeArray = Encoding.convert(bytes, {
+    from: 'SJIS',
+    to: 'UNICODE',
+    type: 'array'
+  });
+  
+  // UnicodeからUTF-8に変換
+  const utf8Array = Encoding.convert(unicodeArray, {
+    from: 'UNICODE',
+    to: 'UTF8',
+    type: 'array'
+  });
+  
+  return new Uint8Array(utf8Array).buffer;
 }
 
 /**
@@ -56,9 +56,23 @@ export function convertSJISToUTF8(buffer: ArrayBuffer): ArrayBufferLike {
  * @returns SJISエンコードされたバッファ
  */
 export function convertUTF8ToSJIS(buffer: ArrayBuffer): ArrayBufferLike {
-  const utf8Buffer = Buffer.from(buffer);
-  const utf8String = iconv.decode(utf8Buffer, 'UTF-8');
-  return iconv.encode(utf8String, 'Shift_JIS').buffer;
+  const bytes = new Uint8Array(buffer);
+  
+  // UTF-8からUnicodeに変換
+  const unicodeArray = Encoding.convert(bytes, {
+    from: 'UTF8',
+    to: 'UNICODE',
+    type: 'array'
+  });
+  
+  // UnicodeからSJISに変換
+  const sjisArray = Encoding.convert(unicodeArray, {
+    from: 'UNICODE',
+    to: 'SJIS',
+    type: 'array'
+  });
+  
+  return new Uint8Array(sjisArray).buffer;
 }
 
 /**
