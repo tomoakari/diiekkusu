@@ -1,5 +1,5 @@
 import iconv from 'iconv-lite';
-import { saveAs } from 'file-saver';
+import FileSaver from 'file-saver';
 
 /**
  * ファイルの文字コードを検出する
@@ -76,7 +76,7 @@ export function downloadConvertedFile(buffer: ArrayBufferLike, originalFileName:
   const baseName = fileNameParts.join('.');
   const newFileName = `${baseName}_converted.${extension}`;
   
-  saveAs(blob, newFileName);
+  FileSaver.saveAs(blob, newFileName);
 }
 
 /**
