@@ -30,7 +30,7 @@
         on:click={() => window.location.href = "/"} 
         class="text-xl font-semibold text-primary"
       >
-        ディーエックス
+        でいいえっくす
       </button>
     </div>
 
